@@ -32,9 +32,11 @@ path has no record. The exporter creates the output folders during export.
   or debuff color. Icons with no configured tint keep their source colors.
 - Talent icons use the unlocked color from the talent menu. The GUI style's
   green is used unless the talent defines a color override.
-- Enable **Include additional sprites** to also export other matched images.
-  Their names include the sprite tag, for example `Items/idcard_sprite.png`.
-  Filename collisions receive a numeric suffix. Filenames are ASCII.
+- By default, items with both an inventory icon and an item sprite export
+  both, for example `Items/idcard.png` and `Items/idcard_sprite.png`.
+  Enable **Include additional sprites** to export other matched images with
+  their sprite tags in the filename. Filename collisions receive a numeric
+  suffix. Filenames are ASCII.
 - The exporter supports `sourcerect` and `sheetindex` with `sheetelementsize`.
   It uses the whole texture if the declaration supplies no crop. Rectangles
   that overlap a texture edge preserve their dimensions with transparent

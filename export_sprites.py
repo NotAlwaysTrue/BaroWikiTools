@@ -471,6 +471,13 @@ def export_sprites(content, output, *, identifiers=(), kinds=(), tags=(), all_sp
             primary.append((prefab, element, directories, sprites[0]))
             if all_sprites:
                 additional.extend((prefab, element, directories, sprite) for sprite in sprites[1:])
+            elif prefab.folder == "Items" and sprites[0].tag == "inventoryicon" and sprites[0].depth == 1:
+                item_sprite = next(
+                    (sprite for sprite in sprites[1:] if sprite.tag == "sprite" and sprite.depth == 1),
+                    None,
+                )
+                if item_sprite is not None:
+                    additional.append((prefab, element, directories, item_sprite))
 
     exported = 0
     skipped = 0
