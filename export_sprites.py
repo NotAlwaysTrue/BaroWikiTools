@@ -27,9 +27,10 @@ FOLDER_NAMES = {
     "traitormission": "TraitorMissions",
 }
 COLLECTION_TAGS = {"afflictions", "items", "jobs", "missions", "orders", "structures", "talents"}
-AFFLICTION_COLORS = {
+DEFAULT_GUI_COLORS = {
     "buffcolormedium": "110,168,118,255",
     "debuffcolormedium": "155,55,55,255",
+    "green": "154,213,163,255",
 }
 WHITE = (255, 255, 255, 255)
 WINDOWS_DEVICES = {"CON", "PRN", "AUX", "NUL"} | {
@@ -178,7 +179,7 @@ def item_definitions(element, registered_item_file):
 def read_prefabs(content, report):
     prefabs = []
     errors = 0
-    gui_colors = AFFLICTION_COLORS.copy()
+    gui_colors = DEFAULT_GUI_COLORS.copy()
     gui_style = content / "UI" / "style.xml"
     manifest = content / "ContentPackages" / "Vanilla.xml"
     try:
@@ -283,6 +284,14 @@ def icon_tint(prefab, element, sprite, primary, gui_colors):
     if not (sprite.is_icon or item_sprite or command_sprite):
         return WHITE
 
+    if prefab.folder == "Talents":
+        override = attrs.get("coloroverride", "").strip()
+        if override:
+            color = parse_color(override, gui_colors)
+            if color != (0, 0, 0, 0):
+                return color
+        return parse_color("gui.green", gui_colors)
+
     palette = sprite.colors or attrs.get("iconcolors")
     if palette:
         stops = palette.split(";")
@@ -298,8 +307,6 @@ def icon_tint(prefab, element, sprite, primary, gui_colors):
         color = attrs.get("inventoryiconcolor")
     elif item_sprite:
         color = attrs.get("spritecolor")
-    elif prefab.folder == "Talents":
-        color = attrs.get("coloroverride")
     elif prefab.folder == "Jobs":
         color = attrs.get("uicolor")
     color = color or sprite.color or attrs.get("iconcolor") or attrs.get("color")
@@ -404,7 +411,7 @@ def unique_target(output, category, stem, used):
     target = folder / f"{stem}.png"
     number = 2
     while str(target).casefold() in used:
-        target = folder / f"{stem}__{number}.png"
+        target = folder / f"{stem}_{number}.png"
         number += 1
     used.add(str(target).casefold())
     return target
@@ -477,7 +484,7 @@ def export_sprites(content, output, *, identifiers=(), kinds=(), tags=(), all_sp
             matched.add(prefab.identifier.casefold())
             stem = ascii_filename(prefab.identifier)
             if suffix:
-                stem += f"__{ascii_filename(sprite.tag)}"
+                stem += f"_{ascii_filename(sprite.tag)}"
             target = unique_target(output, prefab.folder, stem, used)
             relative = target.relative_to(output).as_posix()
             processed += 1

@@ -30,8 +30,10 @@ path has no record. The exporter creates the output folders during export.
 - Icons use the midpoint of a defined color gradient or their configured single
   color. Afflictions without a custom gradient use the GUI style's medium buff
   or debuff color. Icons with no configured tint keep their source colors.
+- Talent icons use the unlocked color from the talent menu. The GUI style's
+  green is used unless the talent defines a color override.
 - Enable **Include additional sprites** to also export other matched images.
-  Their names include the sprite tag, for example `Items/idcard__sprite.png`.
+  Their names include the sprite tag, for example `Items/idcard_sprite.png`.
   Filename collisions receive a numeric suffix. Filenames are ASCII.
 - The exporter supports `sourcerect` and `sheetindex` with `sheetelementsize`.
   It uses the whole texture if the declaration supplies no crop. Rectangles
